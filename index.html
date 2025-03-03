@@ -26,9 +26,6 @@
 <body>
   <h1>Welcome to Our App</h1>
   <p>If the app is installed, you will be redirected to the content.</p>
-  <p class="fallback" id="fallback-message" style="display: none;">
-    <a class="download-btn" href="https://play.google.com/store/apps/details?id=com.spotify.music&hl=en_US" target="_blank">Download the App</a>
-  </p>
 
   <script>
     function getTrackIdFromUrl() {
@@ -36,36 +33,36 @@
       return urlParams.get('trackId'); 
     }
 
-
     const trackId = getTrackIdFromUrl();
 
     if (!trackId) {
       document.getElementById('fallback-message').style.display = 'block'; 
-        }
+    }
 
     const appScheme = `exp://10.39.18.71:8081/--/SongsInfoScreen/${trackId}`; 
-    const fallbackUrl = 'https://play.google.com/store/apps/details?id=com.spotify.music&hl=en_US'; 
-    const timeoutDuration = 1000; 
-    
+    const fallbackUrl = 'https://g.co/kgs/asCxHuJ'; 
+    const timeoutDuration = 1500;
+
     function detectApp() {
       const startTime = Date.now();
-      const iframe = document.createElement('iframe');
-      iframe.style.display = 'none';
-      iframe.src = appScheme;
-      document.body.appendChild(iframe);
+
+      window.location.href = appScheme;
 
       setTimeout(() => {
         const timeTaken = Date.now() - startTime;
+        
         if (timeTaken < timeoutDuration + 100) {
-          window.location.href = appScheme;
-        } else {
           window.location.href = fallbackUrl;
         }
-        document.body.removeChild(iframe);
       }, timeoutDuration);
     }
+
     window.onload = function () {
-      detectApp();
+      if (trackId) {
+        detectApp();
+      } else {
+        document.getElementById('fallback-message').style.display = 'block'; 
+      }
     };
   </script>
 </body>
