@@ -31,9 +31,21 @@
   </p>
 
   <script>
-    const appScheme = 'exp://10.39.18.71:8081/--/SongsInfoScreen/7nGTzzkjs8XIihgcxgBKhF'; // URI Scheme for your app (change to match your app's scheme)
-    const fallbackUrl = 'https://play.google.com/store/apps/details?id=com.spotify.music&hl=en_US'; // Google Play Store URL
-    const timeoutDuration = 2000; // Timeout duration for detecting the app (in milliseconds)
+    function getTrackIdFromUrl() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('trackId'); 
+    }
+
+
+    const trackId = getTrackIdFromUrl();
+
+    if (!trackId) {
+      document.getElementById('fallback-message').style.display = 'block'; 
+        }
+
+    const appScheme = `exp://10.39.18.71:8081/--/SongsInfoScreen/${trackId}`; 
+    const fallbackUrl = 'https://play.google.com/store/apps/details?id=com.spotify.music&hl=en_US'; 
+    const timeoutDuration = 1000; 
     
     function detectApp() {
       const startTime = Date.now();
@@ -43,20 +55,15 @@
       document.body.appendChild(iframe);
 
       setTimeout(() => {
-        // Check if the app was opened based on the time it takes
         const timeTaken = Date.now() - startTime;
         if (timeTaken < timeoutDuration + 100) {
-          // If the app is opened, it means the app was installed.
-          window.location.href = appScheme; // Redirect to app URI
+          window.location.href = appScheme;
         } else {
-          // App is not installed, show the fallback content and redirect to the store
           window.location.href = fallbackUrl;
         }
-        document.body.removeChild(iframe); // Clean up the iframe
+        document.body.removeChild(iframe);
       }, timeoutDuration);
     }
-
-    // Run the app detection when the page loads
     window.onload = function () {
       detectApp();
     };
