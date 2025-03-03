@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>App Deep Linking</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    .fallback {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+    .download-btn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to Our App</h1>
+  <p>If the app is installed, you will be redirected to the content.</p>
+  <p class="fallback" id="fallback-message" style="display: none;">
+    <a class="download-btn" href="https://yourapp.com/download">Download the App</a>
+  </p>
+
+  <script>
+    const appScheme = 'exp://10.39.18.71:8081/--/SongsInfoScreen/7nGTzzkjs8XIihgcxgBKhF'; // URI Scheme for your app (change to match your app's scheme)
+    const fallbackUrl = 'https://yourapp.com/deep-linking'; // Fallback URL (landing page or website)
+    const timeoutDuration = 2000; // Timeout duration for detecting the app (in milliseconds)
+    
+    function detectApp() {
+      const startTime = Date.now();
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      iframe.src = appScheme;
+      document.body.appendChild(iframe);
+
+      setTimeout(() => {
+        // Check if the app was opened based on the time it takes
+        const timeTaken = Date.now() - startTime;
+        if (timeTaken < timeoutDuration + 100) {
+          // If the app is opened, it means the app was installed.
+          window.location.href = appScheme; // Redirect to app URI
+        } else {
+          // App is not installed, show the fallback content.
+          document.getElementById('fallback-message').style.display = 'block';
+        }
+        document.body.removeChild(iframe); // Clean up the iframe
+      }, timeoutDuration);
+    }
+
+    // Run the app detection when the page loads
+    window.onload = function () {
+      detectApp();
+    };
+  </script>
+</body>
+</html>
