@@ -27,12 +27,12 @@
   <h1>Welcome to Our App</h1>
   <p>If the app is installed, you will be redirected to the content.</p>
   <p class="fallback" id="fallback-message" style="display: none;">
-    <a class="download-btn" href="https://yourapp.com/download">Download the App</a>
+    <a class="download-btn" href="https://play.google.com/store/apps/details?id=com.spotify.music&hl=en_US" target="_blank">Download the App</a>
   </p>
 
   <script>
     const appScheme = 'exp://10.39.18.71:8081/--/SongsInfoScreen/7nGTzzkjs8XIihgcxgBKhF'; // URI Scheme for your app (change to match your app's scheme)
-    const fallbackUrl = 'https://yourapp.com/deep-linking'; // Fallback URL (landing page or website)
+    const fallbackUrl = 'https://play.google.com/store/apps/details?id=com.spotify.music&hl=en_US'; // Google Play Store URL
     const timeoutDuration = 2000; // Timeout duration for detecting the app (in milliseconds)
     
     function detectApp() {
@@ -49,8 +49,8 @@
           // If the app is opened, it means the app was installed.
           window.location.href = appScheme; // Redirect to app URI
         } else {
-          // App is not installed, show the fallback content.
-          document.getElementById('fallback-message').style.display = 'block';
+          // App is not installed, show the fallback content and redirect to the store
+          window.location.href = fallbackUrl;
         }
         document.body.removeChild(iframe); // Clean up the iframe
       }, timeoutDuration);
